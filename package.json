@@ -1,0 +1,23 @@
+{
+  "name": "new-folder",
+  "version": "1.0.0",
+  "description": "parcel understanding",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shub7800/Namaste-React.git"
+  },
+  "author": "Shubham",
+  "license": "ISC",
+  "devDependencies": {
+    "parcel": "^2.16.0"
+  },
+  "dependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  }
+}

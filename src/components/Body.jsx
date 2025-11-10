@@ -4,7 +4,7 @@ import Shimmer from "./Shimmer";
 
 const Body = () => {
   const [restaurantdata, setRestaurantdata] = useState([]);
-  const [filteredRestaurant , setFilteredRestaurant]=useState([])
+  const [filteredRestaurant, setFilteredRestaurant] = useState([]);
   const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
@@ -30,6 +30,7 @@ const Body = () => {
 
     // ✅ Always set an array --> prevents `.map` crashing
     setRestaurantdata(restaurants);
+    setFilteredRestaurant(restaurants);
   };
 
   // conditional rendering
@@ -51,12 +52,12 @@ const Body = () => {
               setSearchText(e.target.value);
             }}
           />
-          <button
+          {/* <button
             onClick={() => {
               //filyter the restrant cards and update the ui
               //searchText
               console.log(searchText);
-              const filteredRestaurant = restaurantdata.filter((res)=>  
+              const filteredRestaurant = restaurantdata.filter((res) =>
                 res.info?.name.toLowerCase().includes(searchText.toLowerCase())
               );
 
@@ -64,9 +65,19 @@ const Body = () => {
             }}
           >
             Search
+          </button> */}
+          <button
+            onClick={() => {
+              const filteredRestaurant = restaurantdata.filter((res) =>
+                res.info?.name.toLowerCase().includes(searchText.toLowerCase())
+              );
+              setFilteredRestaurant(filteredRestaurant);
+            }}
+          >
+            Search
           </button>
         </div>
-        <button
+        {/* <button
           className="filter-btn"
           onClick={() => {
             const filteredList = restaurantdata.filter(
@@ -76,13 +87,24 @@ const Body = () => {
           }}
         >
           Top Rated Restaurant
+        </button> */}
+        <button
+          className="filter-btn"
+          onClick={() => {
+            const filteredList = restaurantdata.filter(
+              (res) => res.info?.avgRating > 4.5
+            );
+            setFilteredRestaurant(filteredList);
+          }}
+        >
+          Top Rated Restaurant
         </button>
       </div>
 
       <div className="res-container">
         {/* ✅ Extra safety check */}
-        {Array.isArray(restaurantdata) &&
-          restaurantdata.map((restaurant) => (
+        {Array.isArray(filteredRestaurant) &&
+          filteredRestaurant.map((restaurant) => (
             <RestaurantCard key={restaurant?.info?.id} resData={restaurant} />
           ))}
       </div>

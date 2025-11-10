@@ -4,6 +4,8 @@ import Shimmer from "./Shimmer";
 
 const Body = () => {
   const [restaurantdata, setRestaurantdata] = useState([]);
+  const [filteredRestaurant , setFilteredRestaurant]=useState([])
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     fetchData();
@@ -30,19 +32,45 @@ const Body = () => {
     setRestaurantdata(restaurants);
   };
 
-  //conditional rendering 
-  if(restaurantdata.length===0){
-    return <Shimmer />; 
-  }
- 
-  return (
+  // conditional rendering
+  // if(restaurantdata.length===0){
+  //   return <Shimmer />;
+  // }
+
+  return restaurantdata.length === 0 ? (
+    <Shimmer />
+  ) : (
     <div className="body">
-      <div className="Filter">
+      <div className="filter">
+        <div className="search">
+          <input
+            type="text"
+            className="search-box"
+            value={searchText}
+            onChange={(e) => {
+              setSearchText(e.target.value);
+            }}
+          />
+          <button
+            onClick={() => {
+              //filyter the restrant cards and update the ui
+              //searchText
+              console.log(searchText);
+              const filteredRestaurant = restaurantdata.filter((res)=>  
+                res.info?.name.toLowerCase().includes(searchText.toLowerCase())
+              );
+
+              setFilteredRestaurant(filteredRestaurant);
+            }}
+          >
+            Search
+          </button>
+        </div>
         <button
           className="filter-btn"
           onClick={() => {
             const filteredList = restaurantdata.filter(
-              (res) => res.info?.avgRating > 4
+              (res) => res.info?.avgRating > 4.5
             );
             setRestaurantdata(filteredList);
           }}
@@ -55,10 +83,7 @@ const Body = () => {
         {/* ✅ Extra safety check */}
         {Array.isArray(restaurantdata) &&
           restaurantdata.map((restaurant) => (
-            <RestaurantCard
-              key={restaurant?.info?.id}
-              resData={restaurant}
-            />
+            <RestaurantCard key={restaurant?.info?.id} resData={restaurant} />
           ))}
       </div>
     </div>

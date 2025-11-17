@@ -1,43 +1,41 @@
-import { useEffect } from "react";
-
 const RestaurantMenu = () => {
+  const [resInfo, setResInfo] = useState(null);
+  const { resId } = useParams();
+
   useEffect(() => {
     fetchMenu();
   }, []);
 
- const fetchMenu = async () => {
-  try {
-    const response = await fetch(
-      "https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=28.57590&lng=77.33450&restaurantId=237332&catalog_qa=undefined&submitAction=ENTER"
-    );
+  const fetchMenu = async () => {
+    const data = await fetch(MENU_API + resId);
+    const json = await data.json();
+    console.log(json);
+    setResInfo(json.data);
+  };
 
-    // Check if response is OK
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+  if (resInfo === null) return <Shimmer />;
 
-    // Try to parse JSON safely
-    const text = await response.text();
-    const json = text ? JSON.parse(text) : {};
-    console.log("json",json);
-
-  } catch (error) {
-    console.error("Error fetching or parsing menu:", error);
-  }
-};
-
+  const { name, cuisines, costForTwoMessage } =
+    resInfo?.cards[0]?.card?.card?.info;
+  const { itemCards } =
+    resInfo?.cards[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards[1]?.card?.card;
 
   return (
-    <div>
-      <h1>Name of the Restaurant</h1>
+    <div className="menu">
+      <h1>{name}</h1>
+      <h3>
+        {cuisines.join(", ")} - {costForTwoMessage}
+      </h3>
+
       <h2>Menu</h2>
       <ul>
-        <li>Briyani</li>
-        <li>burger</li>
-        <li>diet coke</li>
+        {itemCards.map((item) => (
+          <li key={item.card.info.id}>
+            {item.card.info.name} - Rs.{" "}
+            {item.card.info.price / 100 || item.card.info.defaultPrice / 100}
+          </li>
+        ))}
       </ul>
     </div>
   );
 };
-
-export default RestaurantMenu;

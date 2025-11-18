@@ -1,6 +1,7 @@
 import RestaurantCard from "./RestaurantCard";
 import { useEffect, useState } from "react";
 import Shimmer from "./Shimmer";
+import useOnlineStatus from "../utils/useOnlineStatus";
 
 const Body = () => {
   const [restaurantdata, setRestaurantdata] = useState([]);
@@ -32,6 +33,10 @@ const Body = () => {
     setRestaurantdata(restaurants);
     setFilteredRestaurant(restaurants);
   };
+
+  const OnlineStatus = useOnlineStatus();
+
+  if (OnlineStatus === false)  return <h1>you're offline</h1>;
 
   // conditional rendering
   // if(restaurantdata.length===0){

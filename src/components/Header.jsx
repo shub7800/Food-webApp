@@ -9,11 +9,11 @@ const Header = () => {
   const OnlineStatus = useOnlineStatus();
 
   return (
-    <div className="header">
+    <div className="flex">
       <div className="logo-container logoitem">
-        <img className="logo" src={LOGO_URL} alt="Logo" />
+        <img className="w-25" src={LOGO_URL} alt="Logo" />
       </div>
-      <div className="nav-item">
+      <div className="flex">
         <ul>
           <li>
             online status : {OnlineStatus ? "✅" : "🔴"}
